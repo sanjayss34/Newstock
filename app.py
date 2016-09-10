@@ -15,10 +15,10 @@ def index():
 def stockdata():
     args = request.args.to_dict()
     today = datetime.datetime.now()
-    month_before = today - pd.Timedelta(weeks=4)
+    month_before = today - pd.Timedelta(days=30)
     print(args['symbol'])
     df = get_data(args['symbol'], month_before.month-1, month_before.day, month_before.year, today.month-1, today.day, today.year)
-    data = ml.get_data(args['symbol'])
+    data = ml.get_data(args['symbol'], list(df.index.astype('str'))[::-1])
     new_data = {}
     print(len(data.keys()))
     for d in data.keys():

@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import urllib
 import urllib2
 import json
+import gnp
 
 def get_company_name(symbol):
     symbol = symbol.upper()
@@ -24,6 +25,15 @@ def get_bing_news_articles(query, limit=100):
     bing_news = PyBingNewsSearch(api_key, query)
     results = bing_news.search(limit=limit, format='json')
     print(results)
+    return results
+
+def get_google_news_articles(query, dates):
+    gnews = gnp.get_google_news(gnp.EDITION_ENGLISH_US)
+    results = []
+    for d in dates:
+        response = gnp.get_google_news_query(query + ' ' + d)
+        for r in range(0, min(10, len(response['stories']))):
+            results.append({'date': d, 'url': response['stories'][r]['link']})
     return results
 
 def get_webhose_news_articles(query):
@@ -48,7 +58,7 @@ def get_text(list_of_news_articles):
         # url = news_articles.url
         # date = news_articles.date
         url = str(news_articles['url'])
-        date = str(news_articles['published'])
+        date = str(news_articles['date'])
 
         r = urllib.urlopen(url).read()
         soup = BeautifulSoup(r)
@@ -70,5 +80,5 @@ def get_text(list_of_news_articles):
     print(len(dict_of_text.keys()))
     return dict_of_text
 
-def get_data(query):
-	return get_text(get_webhose_news_articles(get_company_name(query)))
+def get_data(query, dates):
+	return get_text(get_google_news_articles(get_company_name(query), dates))

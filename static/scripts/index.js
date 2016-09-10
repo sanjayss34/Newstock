@@ -16,6 +16,9 @@ var NavBar = React.createClass({
 var InputForm = React.createClass({
     submitForm: function(e) {
         e.preventDefault();
+        /*ReactDOM.render(React.createElement('div', {className: 'progress', style: {width: '100%'}},
+            React.createElement('div', {className: 'progress-bar progress-bar-striped active', role: 'progressbar'})), document.getElementById('chart-container'));*/
+        ReactDOM.render(React.createElement('div', {style: {width: "30%", textAlign: "center"}}, React.createElement('ProgressBar', {className: 'active', now: "100%"})), document.getElementById('chart-container'));
         var url = 'http://localhost:5000/stockdata?symbol='+document.getElementById('symbol').value;
         var xmlhttp = new XMLHttpRequest();
         isLoaded = false;
@@ -48,7 +51,7 @@ var InputForm = React.createClass({
                         chart: {
                             renderTo: 'chart-container',
                             zoomType: 'xy',
-                            backgroundColor:'rgba(255, 255, 255, 0.5)'
+                            backgroundColor:'rgba(255, 255, 255, 0.7)'
                         },
                         title: {
                             text: symbol + ': Last 30 Days'
