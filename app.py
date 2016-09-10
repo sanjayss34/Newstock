@@ -27,7 +27,13 @@ def stockdata():
             new_data[date] = [(d, data[d][1])]
         else:
             new_data[date].append((d, data[d][1]))
-    return jsonify(**{'Dates': list(df.index.astype('str'))[::-1], 'Prices': list(df['Adj Close'])[::-1], 'ArticleData': new_data})
+
+    values = data.values()
+    list_of_polarity = []
+    for article_tuple in values:
+        list_of_polarity.append(article_tuple[2])
+
+    return jsonify(**{'Dates': list(df.index.astype('str'))[::-1], 'Prices': list(df['Adj Close'])[::-1], 'ArticleData': new_data, 'Polarity': list_of_polarity})
 
 @app.route('/symbols', methods=['GET'])
 def symbols():
