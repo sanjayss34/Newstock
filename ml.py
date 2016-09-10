@@ -9,7 +9,7 @@ def get_probabilities(map_of_articles):
         date = map_of_articles[article][1]
         blob = TextBlob(text)
         print(blob.sentiment.polarity)
-        polarities[article] = (str(date), blob.sentiment.polarity**(1-blob.sentiment.subjectivity))
+        polarities[article] = (str(date), blob.sentiment.polarity)
     return polarities
 
 def get_data(query, dates):
