@@ -8,8 +8,22 @@ var NavBar = React.createClass({
 });
 
 var InputForm = React.createClass({
+    submitForm: function(e) {
+        e.preventDefault();
+        var url = 'http://localhost:5000/stockdata?symbol='+document.getElementById('symbol').value;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var res = JSON.parse(xmlhttp.responseText);
+                console.log(res);
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    },
+
     render: function() {
-        return React.createElement('form', {className: 'form-inline'},
+        return React.createElement('form', {className: 'form-inline', onSubmit: this.submitForm},
             React.createElement('div',
                 {className: "input-group",
                  style: {width: "100%", textAlign: 'center'}
