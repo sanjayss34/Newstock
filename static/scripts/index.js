@@ -24,19 +24,64 @@ var InputForm = React.createClass({
                 var res = JSON.parse(xmlhttp.responseText);
                 dates = res['Dates'];
                 prices = res['Prices'];
-                symbol = document.getElementById('symbol');
+                symbol = document.getElementById('symbol').value.toUpperCase();
                 isLoaded = true;
+                var polarities = [];
+                console.log(res['ArticleData']);
+                for(i = 0; i < dates.length; i++) {
+                    if (dates[i] in res['ArticleData']) {
+                        var meanVal = 0.0
+                        for (j = 0; j < res['ArticleData'][dates[i]].length; j++) {
+                            meanVal = meanVal + res['ArticleData'][dates[i]][j][1];
+                        }
+                        meanVal = meanVal/res['ArticleData'][dates[i]].length;
+                        console.log(meanVal);
+                        polarities.push(meanVal);
+                    }
+                    else {
+                        polarities.push(0.0);
+                    }
+                }
+                console.log(polarities)
                 if (appObj) {
-                    console.log('here');
                     var chart = new Highcharts.Chart({
                         chart: {
-                            renderTo: 'chart-container'
+                            renderTo: 'chart-container',
+                            zoomType: 'xy',
+                            backgroundColor:'rgba(255, 255, 255, 0.5)'
+                        },
+                        title: {
+                            text: symbol + ': Last 30 Days'
                         },
                         xAxis: {
                             categories: dates
                         },
+                        yAxis: [{
+                            title: {
+                                text: 'Stock Price'
+                            },
+                            labels: {
+                                format: '${value}'
+                            },
+                            opposite: false
+                        }, {
+                            title: {
+                                text: 'Rating'
+                            },
+                            min: -1.0,
+                            max: 1.0,
+                            opposite: true
+                        }],
                         series: [{
+                            name: 'Price',
+                            type: 'spline',
+                            yAxis: 0,
                             data: prices
+                        }, {
+                            name: 'Rating',
+                            type: 'spline',
+                            yAxis: 1,
+                            data: polarities
                         }]
                     });
                 }
