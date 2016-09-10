@@ -20,7 +20,7 @@ def stockdata():
     print('done')
     data = ml.get_data(args['symbol'])
     return jsonify(**{'Dates': list(df.index.astype('str')), 'Prices': list(df['Adj Close'])})
-    data = ml.get_data(args['symbol'])
+
 
 if __name__ == "__main__":
     app.run()

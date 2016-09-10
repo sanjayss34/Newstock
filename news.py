@@ -33,4 +33,4 @@ def get_text(list_of_news_articles):
 	return dict_of_text
 
 def get_data(query):
-	return get_text(get_news_articles('apple'))
+	return get_text(get_news_articles(query))
