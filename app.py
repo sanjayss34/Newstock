@@ -20,7 +20,12 @@ def stockdata():
     print('done')
     data = ml.get_data(args['symbol'])
 
-    return jsonify(**{'Dates': list(df.index.astype('str')), 'Prices': list(df['Adj Close'])})
+    values = data.values()
+    list_of_polarity = []
+    for article_tuple in values:
+        list_of_polarity.append(article_tuple[1])
+
+    return jsonify(**{'Dates': list(df.index.astype('str')), 'Prices': list(df['Adj Close']), 'Polarity': list_of_polarity})
 
 if __name__ == "__main__":
     app.run()

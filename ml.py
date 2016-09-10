@@ -13,7 +13,7 @@ def get_probabilities(map_of_articles, max_delta):
 		weighted_score = ((max_delta - delta) * (blob.sentiment.polarity))/max_delta
 
 		blob = TextBlob(text)
-        polarities[article] = (date_, weighted_score)
+        polarities[article] = (date_unicode, weighted_score)
 	return polarities
 
 def get_data(query):
