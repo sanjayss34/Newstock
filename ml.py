@@ -9,4 +9,5 @@ def get_probabilities(map_of_articles):
 		polarities[article] = blob.sentiment.polarity
 	return polarities
 
-print get_probabilities(news.get_data('apple'))
+def get_data(query):
+	return  get_probabilities(news.get_data(query))
