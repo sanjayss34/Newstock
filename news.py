@@ -12,6 +12,8 @@ def get_text(list_of_news_articles):
 	dict_of_text = {}
 	for news_articles in list_of_news_articles:
 		url = news_articles.url
+		date = news_articles.date
+
 		r = urllib.urlopen(url).read()
 		soup = BeautifulSoup(r)
 		# kill all script and style elements
@@ -28,9 +30,9 @@ def get_text(list_of_news_articles):
 		# drop blank lines
 		text = '\n'.join(chunk for chunk in chunks if chunk)
 
-		dict_of_text[url] = text
+		dict_of_text[url] = (text, date)
 
 	return dict_of_text
 
 def get_data(query):
-	return get_text(get_news_articles('apple'))
+	return get_text(get_news_articles(query))
