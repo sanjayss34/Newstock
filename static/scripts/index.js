@@ -24,9 +24,21 @@ var InputForm = React.createClass({
                 var res = JSON.parse(xmlhttp.responseText);
                 dates = res['Dates'];
                 prices = res['Prices'];
-                symbol = document.getElementById('symbol').value;
+                symbol = document.getElementById('symbol');
                 isLoaded = true;
                 if (appObj) {
+                    console.log('here');
+                    var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'chart-container'
+                        },
+                        xAxis: {
+                            categories: dates
+                        },
+                        series: [{
+                            data: prices
+                        }]
+                    });
                 }
             }
         };
@@ -48,7 +60,6 @@ var InputForm = React.createClass({
                 {type: "text",
                 className: "form-control",
                 id: "symbol",
-                value: symbol,
                 style: {borderRadius: "10px 0px 0px 10px"}
                 }),
                 React.createElement("button",
@@ -62,30 +73,10 @@ var InputForm = React.createClass({
 var App = React.createClass({
     displayName: 'App',
 
-    componentDidMount: function() {
-        if (isLoaded) {
-            $("#chart-container").highcharts({
-                chart: {
-                    type: 'line'
-                },
-                title: {
-                    text: 'Last 30 Days'
-                },
-                xAxis: {
-                    categories: dates
-                },
-                series: [{
-                    name: symbol,
-                    data: prices
-                }]
-            });
-        }
-    },
     render: function() {
         return React.createElement('div', {},
             React.createElement(NavBar),
             React.createElement(InputForm));
-            React.createElement('div', {id: 'chart-container'});
     }
 });
 
