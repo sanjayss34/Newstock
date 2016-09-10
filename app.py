@@ -19,8 +19,8 @@ def stockdata():
     df = get_data(args['symbol'], month_before.month-1, month_before.day, month_before.year, today.month-1, today.day, today.year)
     print('done')
     data = ml.get_data(args['symbol'])
-    return jsonify(**{'Dates': list(df.index.astype('str')), 'Prices': list(df['Adj Close'])})
 
+    return jsonify(**{'Dates': list(df.index.astype('str')), 'Prices': list(df['Adj Close'])})
 
 if __name__ == "__main__":
     app.run()
