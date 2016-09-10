@@ -1,3 +1,9 @@
+var isLoaded = false;
+var symbol = "";
+var prices = null;
+var dates = null;
+var appObj = null;
+
 var NavBar = React.createClass({
     render: function() {
         return React.createElement('nav', {className: "navbar navbar-default"},
@@ -12,10 +18,16 @@ var InputForm = React.createClass({
         e.preventDefault();
         var url = 'http://localhost:5000/stockdata?symbol='+document.getElementById('symbol').value;
         var xmlhttp = new XMLHttpRequest();
+        isLoaded = false;
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 var res = JSON.parse(xmlhttp.responseText);
-                console.log(res);
+                dates = res['Dates'];
+                prices = res['Prices'];
+                symbol = document.getElementById('symbol').value;
+                isLoaded = true;
+                if (appObj) {
+                }
             }
         };
         xmlhttp.open("GET", url, true);
@@ -36,6 +48,7 @@ var InputForm = React.createClass({
                 {type: "text",
                 className: "form-control",
                 id: "symbol",
+                value: symbol,
                 style: {borderRadius: "10px 0px 0px 10px"}
                 }),
                 React.createElement("button",
@@ -47,11 +60,35 @@ var InputForm = React.createClass({
 });
 
 var App = React.createClass({
+    displayName: 'App',
+
+    componentDidMount: function() {
+        if (isLoaded) {
+            $("#chart-container").highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Last 30 Days'
+                },
+                xAxis: {
+                    categories: dates
+                },
+                series: [{
+                    name: symbol,
+                    data: prices
+                }]
+            });
+        }
+    },
     render: function() {
         return React.createElement('div', {},
             React.createElement(NavBar),
             React.createElement(InputForm));
+            React.createElement('div', {id: 'chart-container'});
     }
 });
 
-ReactDOM.render(React.createElement(App), document.getElementById('body'));
+appObj = React.createElement(App)
+
+ReactDOM.render(appObj, document.getElementById('body'));
