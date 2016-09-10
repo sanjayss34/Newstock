@@ -31,11 +31,17 @@ var InputForm = React.createClass({
                 isLoaded = true;
                 var polarities = [];
                 console.log(res['ArticleData']);
+                var polVal = 0.0;
+                var count = 0;
                 for(i = 0; i < dates.length; i++) {
                     if (dates[i] in res['ArticleData']) {
                         var meanVal = 0.0
                         for (j = 0; j < res['ArticleData'][dates[i]].length; j++) {
                             meanVal = meanVal + res['ArticleData'][dates[i]][j][1];
+                            if (dates.length-i <= 3) {
+                                polVal = polVal + res['ArticleData'][dates[i]][j][1];
+                                count++;
+                            }
                         }
                         meanVal = meanVal/res['ArticleData'][dates[i]].length;
                         console.log(meanVal);
@@ -45,6 +51,23 @@ var InputForm = React.createClass({
                         polarities.push(0.0);
                     }
                 }
+                polVal = polVal/count;
+                var message = 'HOLD';
+                var color = 'blue';
+                if (polVal > 0.1) {
+                    message = 'BUY';
+                    color = 'green';
+                }
+                else if (polVal < -0.1) {
+                    message = 'SELL';
+                    color = 'red';
+                }
+                ReactDOM.render(React.createElement('button',
+                {
+                    style: {backgroundColor: color, fontColor: 'white'},
+                    className: 'btn btn-default'
+                }, message), document.getElementById('message'));
+                // ReactDOM.render(React.createElement('', {: 'blue'}, message), document.getElementById('message'));
                 console.log(polarities)
                 if (appObj) {
                     var chart = new Highcharts.Chart({

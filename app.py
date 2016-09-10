@@ -4,6 +4,7 @@ import datetime
 import pandas as pd
 import ml
 import urllib2
+import numpy as np
 
 app = Flask(__name__)
 
@@ -28,12 +29,7 @@ def stockdata():
         else:
             new_data[date].append((d, data[d][1]))
 
-    values = data.values()
-    list_of_polarity = []
-    for article_tuple in values:
-        list_of_polarity.append(article_tuple[2])
-
-    return jsonify(**{'Dates': list(df.index.astype('str'))[::-1], 'Prices': list(df['Adj Close'])[::-1], 'ArticleData': new_data, 'Polarity': list_of_polarity})
+    return jsonify(**{'Dates': list(df.index.astype('str'))[::-1], 'Prices': list(df['Adj Close'])[::-1], 'ArticleData': new_data})
 
 @app.route('/symbols', methods=['GET'])
 def symbols():
